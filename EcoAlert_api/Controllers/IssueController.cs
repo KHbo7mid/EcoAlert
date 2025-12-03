@@ -22,7 +22,8 @@ namespace EcoAlert.Controllers
             _logger = logger;
         }
         [HttpPost]
-        public async Task<IActionResult> CreateIssue([FromBody] CreateIssueDto createIssueDto)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> CreateIssue([FromForm] CreateIssueDto createIssueDto)
         {
             try
             {

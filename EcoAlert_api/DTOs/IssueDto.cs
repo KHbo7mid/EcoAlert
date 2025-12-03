@@ -12,6 +12,7 @@ namespace EcoAlert.DTOs
         public string? Address { get; set; }
         public string? City { get; set; }
         public int CategoryId { get; set; }
+        public List<IFormFile>? Images { get; set; }
     }
 
     public class UpdateIssueStatusDto

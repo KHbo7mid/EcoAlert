@@ -26,6 +26,7 @@ namespace EcoAlert
             //Add Services
             builder.Services.AddScoped<IIssueService, IssueService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IImageService, ImageService>();
             // Configure CORS
             builder.Services.AddCors(options =>
             {
@@ -118,7 +119,14 @@ namespace EcoAlert
 
 
             var app = builder.Build();
+            app.UseStaticFiles();
 
+            // Create uploads directory if it doesn't exist
+            var uploadsPath = Path.Combine(app.Environment.WebRootPath, "uploads", "issues");
+            if (!Directory.Exists(uploadsPath))
+            {
+                Directory.CreateDirectory(uploadsPath);
+            }
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {

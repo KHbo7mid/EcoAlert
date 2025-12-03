@@ -13,12 +13,14 @@ namespace EcoAlert.Services
         private readonly EcoAlertDbContext _context;
         private readonly IMapper _mapper;
         private readonly ILogger<IssueService> _logger;
+        private readonly IImageService _imageService;
 
-        public IssueService(EcoAlertDbContext context, IMapper mapper, ILogger<IssueService> logger)
+        public IssueService(EcoAlertDbContext context, IMapper mapper, ILogger<IssueService> logger, IImageService imageService)
         {
             _context = context;
             _mapper = mapper;
             _logger = logger;
+            _imageService = imageService;
         }
 
       
@@ -54,6 +56,26 @@ namespace EcoAlert.Services
 
                 _context.Issues.Add(issue);
                 await _context.SaveChangesAsync();
+                // Handle image uploads if any
+                if (dto.Images != null && dto.Images.Any())
+                {
+                    var imageUrls = await _imageService.UploadMultipleImageAsync(dto.Images);
+
+                    for (int i = 0; i < imageUrls.Count; i++)
+                    {
+                        var issueImage = new Issueimage
+                        {
+                            IssueId = issue.Id,
+                            ImageUrl = imageUrls[i],
+                            IsPrimary = i == 0, // First image is primary
+                            UploadedAt = DateTime.UtcNow
+                        };
+
+                        _context.Issueimages.Add(issueImage);
+                    }
+
+                    await _context.SaveChangesAsync();
+                }
 
                 _logger.LogInformation($"Issue {issue.Id} created by user {userId}");
 
