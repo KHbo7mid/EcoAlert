@@ -34,6 +34,8 @@ namespace EcoAlert.Services
                 if (user == null)
                     throw new Exception("User not found");
 
+
+
                 // Create issue
                 var issue = new Issue
                 {
@@ -183,6 +185,7 @@ namespace EcoAlert.Services
                     .Include(i => i.Status)
                     .Include(i => i.Priority)
                     .Include(i => i.Reporter)
+                    .Include(i =>i.Issueimages)
                     .AsQueryable();
 
                 // Apply filters
@@ -194,7 +197,7 @@ namespace EcoAlert.Services
 
                 if (!string.IsNullOrEmpty(filter.City))
                     query = query.Where(i => i.City == filter.City);
-
+                query = query.OrderByDescending(i => i.ReportedAt);
                 // Pagination
                 query = query
                     .OrderByDescending(i => i.ReportedAt)

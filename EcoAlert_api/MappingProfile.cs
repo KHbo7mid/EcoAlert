@@ -24,7 +24,8 @@ namespace EcoAlert
                 .ForMember(dest => dest.CommentCount,
                     opt => opt.MapFrom(src => src.Comments.Count))
                 .ForMember(dest => dest.Reporter,
-                    opt => opt.MapFrom(src => src.Reporter));
+                    opt => opt.MapFrom(src => src.Reporter))
+                 .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.Issueimages));
 
             CreateMap<Issue, IssueResponseDto>()
                 .IncludeBase<Issue, IssueDto>()

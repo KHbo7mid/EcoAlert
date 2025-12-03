@@ -37,7 +37,8 @@ namespace EcoAlert.DTOs
         public int CommentCount { get; set; }
         public DateTime ReportedAt { get; set; }
         public required UserDto Reporter { get; set; }
-       
+        public List<IssueImageDto>? Images { get; set; }
+
     }
     public class IssueResponseDto : IssueDto
     {

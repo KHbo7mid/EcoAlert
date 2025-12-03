@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Globalization;
 using System.Text;
 using System.Text.Json.Serialization;
 namespace EcoAlert
@@ -22,6 +23,11 @@ namespace EcoAlert
            
             options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
             new MySqlServerVersion(new Version(8, 0, 33))));
+
+            // Force invariant culture for number parsing
+            var culture = CultureInfo.InvariantCulture;
+            CultureInfo.DefaultThreadCurrentCulture = culture;
+            CultureInfo.DefaultThreadCurrentUICulture = culture;
 
             //Add Services
             builder.Services.AddScoped<IIssueService, IssueService>();
